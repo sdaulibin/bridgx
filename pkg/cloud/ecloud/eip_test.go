@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	_AK       = "b2ef5bd5616b473e9c1cced8d0a25a2e"
-	_SK       = "308bf68354804c8ba526a5750e20d664"
+	_AK       = ""
+	_SK       = ""
 	_regionId = "CIDC-RP-29"
 )
 
