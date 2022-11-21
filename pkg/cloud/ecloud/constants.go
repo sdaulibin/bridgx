@@ -8,6 +8,7 @@ const (
 	_ipTypeMobile   = "MOBILE"
 	_productType    = "ip"
 	_pageSize       = 100
+	_State_OK       = "OK"
 )
 
 var _eipChargeType = map[string]string{

@@ -32,6 +32,14 @@ func (p *ECloud) AllocateEip(req cloud.AllocateEipRequest) (ids []string, err er
 				errChan <- err
 				return
 			}
+			if rsp == nil || rsp.Body == nil {
+				errChan <- fmt.Errorf("AllocateEip Ecloud resp nil req:[%v]", req)
+				return
+			}
+			if rsp.State != _State_OK {
+				errChan <- fmt.Errorf("AllocateEip Ecloud resp state not ok:[%v] req:[%v]", rsp.ErrorMessage, req)
+				return
+			}
 			if rsp.Body != nil {
 				idChan <- rsp.Body.OrderId
 			}
@@ -63,10 +71,17 @@ func (p *ECloud) GetEips(ids []string, regionId string) (map[string]cloud.Eip, e
 		}
 		rsp, err := p.eipClient.GetFipWithBandwidth(getFipWithBandwidthRequest)
 		if err != nil {
-			continue
+			return eipMap, err
 		}
-
-		eipMap[utils.StringValue(&rsp.Body.Id)] = eip2Ecloud(rsp.Body)
+		if rsp == nil || rsp.Body == nil {
+			return eipMap, fmt.Errorf("GetEips Ecloud resp nil req:[%v]", id)
+		}
+		if rsp.State != _State_OK {
+			return eipMap, fmt.Errorf("GetEips Ecloud resp state not ok:[%v] req:[%v]", rsp.ErrorMessage, id)
+		}
+		if rsp.Body != nil {
+			eipMap[utils.StringValue(&rsp.Body.Id)] = eip2Ecloud(rsp.Body)
+		}
 	}
 	return eipMap, nil
 }
@@ -90,6 +105,14 @@ func (p *ECloud) ReleaseEip(ids []string) (err error) {
 				errChan <- err1
 				return
 			}
+			if fipWithBandwidth == nil || fipWithBandwidth.Body == nil {
+				errChan <- fmt.Errorf("GetFipWithBandwidth Ecloud resp nil req:[%v]", id)
+				return
+			}
+			if fipWithBandwidth.State != _State_OK {
+				errChan <- fmt.Errorf("GetFipWithBandwidth Ecloud resp state not ok:[%v] req:[%v]", fipWithBandwidth.ErrorMessage, id)
+				return
+			}
 			resourceId := fipWithBandwidth.Body.BandwidthId
 			relatedResourceId := fipWithBandwidth.Body.Id
 			commonMopOrderDeleteIpRequest := &model.CommonMopOrderDeleteIpRequest{
@@ -99,9 +122,17 @@ func (p *ECloud) ReleaseEip(ids []string) (err error) {
 					RelatedResourceId: relatedResourceId,
 				},
 			}
-			_, err := p.eipClient.CommonMopOrderDeleteIp(commonMopOrderDeleteIpRequest)
+			rsp, err := p.eipClient.CommonMopOrderDeleteIp(commonMopOrderDeleteIpRequest)
 			if err != nil {
 				errChan <- err
+				return
+			}
+			if rsp == nil || rsp.Body == nil {
+				errChan <- fmt.Errorf("CommonMopOrderDeleteIp Ecloud resp nil req:[%v]", id)
+				return
+			}
+			if rsp.State != _State_OK {
+				errChan <- fmt.Errorf("CommonMopOrderDeleteIp Ecloud resp state not ok:[%v] req:[%v]", fipWithBandwidth.ErrorMessage, id)
 				return
 			}
 			idChan <- id
@@ -119,16 +150,20 @@ func (p *ECloud) ReleaseEip(ids []string) (err error) {
 
 func (p *ECloud) AssociateEip(id, instanceId, vpcId string) error {
 	floatingIpBindRequest := &model.FloatingIpBindRequest{
-		FloatingIpBindQuery: &model.FloatingIpBindQuery{
-			//AsyncType: "",
-		},
 		FloatingIpBindBody: &model.FloatingIpBindBody{
 			IpId:       id,
 			ResourceId: instanceId,
 			PortId:     vpcId,
 		},
 	}
-	_, err := p.eipClient.FloatingIpBind(floatingIpBindRequest)
+	rsp, err := p.eipClient.FloatingIpBind(floatingIpBindRequest)
+	if rsp == nil {
+		return fmt.Errorf("AssociateEip Ecloud resp nil id:[%v] instanceId:[%v] vpcId:[%v]", id, instanceId, vpcId)
+
+	}
+	if rsp.OpenApiReturnValue != _State_OK {
+		return fmt.Errorf("AssociateEip Ecloud resp OpenApiReturnValue not ok id:[%v] instanceId:[%v] vpcId:[%v]", id, instanceId, vpcId)
+	}
 	if err != nil {
 		return err
 	}
@@ -141,9 +176,16 @@ func (p *ECloud) DisassociateEip(id string) error {
 			IpId: id,
 		},
 	}
-	_, err := p.eipClient.FloatingIpUnbind(floatingIpUnbindRequest)
+	rsp, err := p.eipClient.FloatingIpUnbind(floatingIpUnbindRequest)
 	if err != nil {
 		return err
+	}
+	if rsp == nil {
+		return fmt.Errorf("DisassociateEip Ecloud resp nil id:[%v]", id)
+
+	}
+	if rsp.OpenApiReturnValue != _State_OK {
+		return fmt.Errorf("DisassociateEip Ecloud resp OpenApiReturnValue not ok id:[%v]", id)
 	}
 	return err
 }
@@ -167,14 +209,23 @@ func (p *ECloud) DescribeEip(req cloud.DescribeEipRequest) (cloud.DescribeEipRes
 		return cloud.DescribeEipResponse{}, err
 	}
 
-	ret := cloud.DescribeEipResponse{
-		List:       []cloud.Eip{},
-		TotalCount: int(utils.Int32Value(rsp.Body.Total)),
+	if rsp == nil || rsp.Body == nil {
+		return cloud.DescribeEipResponse{}, fmt.Errorf("DescribeEip Ecloud resp nil req:[%v]", req)
 	}
-	for _, v := range *rsp.Body.Content {
-		ret.List = append(ret.List, eip2Cloud(&v))
+	if rsp.State != _State_OK {
+		return cloud.DescribeEipResponse{}, fmt.Errorf("DescribeEip Ecloud resp state not ok:[%v] req:[%v]", rsp.ErrorMessage, req)
 	}
-	return ret, nil
+	if rsp.Body != nil {
+		ret := cloud.DescribeEipResponse{
+			List:       []cloud.Eip{},
+			TotalCount: int(utils.Int32Value(rsp.Body.Total)),
+		}
+		for _, v := range *rsp.Body.Content {
+			ret.List = append(ret.List, eip2Cloud(&v))
+		}
+		return ret, nil
+	}
+	return cloud.DescribeEipResponse{}, nil
 }
 
 func (p *ECloud) ConvertPublicIpToEip(req cloud.ConvertPublicIpToEipRequest) error {
