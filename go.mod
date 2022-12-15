@@ -28,6 +28,9 @@ require (
 	github.com/tovenja/cron/v3 v3.0.2
 	github.com/vmihailenco/msgpack/v5 v5.3.5
 	github.com/wxnacy/wgo v1.0.4
+	gitlab.ecloud.com/ecloud/ecloudsdkcore v1.0.0
+	gitlab.ecloud.com/ecloud/ecloudsdkecs v1.0.12
+	gitlab.ecloud.com/ecloud/ecloudsdkeip v1.0.4
 	go.etcd.io/etcd/client/v3 v3.5.4
 	go.uber.org/atomic v1.7.0
 	go.uber.org/zap v1.21.0
@@ -103,7 +106,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/satori/go.uuid v1.2.0
-	github.com/tencentyun/cos-go-sdk-v5 v0.7.39
 	github.com/ugorji/go/codec v1.2.6 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
