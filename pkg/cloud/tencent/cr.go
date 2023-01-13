@@ -1,13 +1,14 @@
 package tencent
 
 import (
+	"strings"
+
 	"github.com/alibabacloud-go/tea/tea"
 	"github.com/galaxy-future/BridgX/internal/logs"
 	"github.com/galaxy-future/BridgX/pkg/cloud"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	tcr "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tcr/v20190924"
-	"strings"
 )
 
 //此处与阿里云对齐，各名称定义如下示例

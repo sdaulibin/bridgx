@@ -4,6 +4,15 @@ import (
 	"github.com/galaxy-future/BridgX/pkg/cloud"
 )
 
+var _endPoints = map[string]string{
+	"bj":  ".bj.baidubce.com",
+	"gz":  ".gz.baidubce.com",
+	"su":  ".su.baidubce.com",
+	"hkg": ".hkg.baidubce.com",
+	"fwh": ".fwh.baidubce.com",
+	"bd":  ".bd.baidubce.com",
+}
+
 var _inEcsChargeType = map[string]string{
 	cloud.InstanceChargeTypePrePaid:  "Prepaid",
 	cloud.InstanceChargeTypePostPaid: "Postpaid",

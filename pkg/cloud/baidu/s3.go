@@ -2,13 +2,13 @@ package baidu
 
 import "github.com/galaxy-future/BridgX/pkg/cloud"
 
-func (b BaiduCloud) ListObjects(endpoint, bucketName, prefix string) (objects []cloud.ObjectProperties, err error) {
-	if res, err := b.bosClient.ListBuckets(); err != nil {
+func (p *BaiduCloud) ListObjects(endpoint, bucketName, prefix string) (objects []cloud.ObjectProperties, err error) {
+	if res, err := p.bosClient.ListBuckets(); err != nil {
 		return nil, err
 	} else {
 		for _, buck := range res.Buckets {
 			if buck.Location == endpoint && buck.Name == bucketName {
-				listObjectResult, err := b.bosClient.ListObjects(bucketName, nil)
+				listObjectResult, err := p.bosClient.ListObjects(bucketName, nil)
 				if err != nil {
 					return nil, err
 				}
@@ -24,9 +24,9 @@ func (b BaiduCloud) ListObjects(endpoint, bucketName, prefix string) (objects []
 	}
 	return
 }
-func (b BaiduCloud) ListBucket(endpoint string) ([]cloud.BucketProperties, error) {
+func (p *BaiduCloud) ListBucket(endpoint string) ([]cloud.BucketProperties, error) {
 	buckets := []cloud.BucketProperties{}
-	if res, err := b.bosClient.ListBuckets(); err != nil {
+	if res, err := p.bosClient.ListBuckets(); err != nil {
 		return nil, err
 	} else {
 		for _, b := range res.Buckets {
@@ -41,12 +41,12 @@ func (b BaiduCloud) ListBucket(endpoint string) ([]cloud.BucketProperties, error
 	return buckets, nil
 }
 
-func (b BaiduCloud) GetOssDownloadUrl(endpoint, bucketName, region string) string {
+func (p *BaiduCloud) GetOssDownloadUrl(endpoint, bucketName, region string) string {
 	// todo
 	return ""
 }
 
-func (b BaiduCloud) GetObjectDownloadUrl(bucketName, objectName string) (string, error) {
-	url := b.bosClient.BasicGeneratePresignedUrl(bucketName, objectName, 300)
+func (p *BaiduCloud) GetObjectDownloadUrl(bucketName, objectName string) (string, error) {
+	url := p.bosClient.BasicGeneratePresignedUrl(bucketName, objectName, 300)
 	return url, nil
 }
