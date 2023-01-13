@@ -529,12 +529,18 @@ type CreateListenerRequest struct {
 	ServerGroupId     string
 }
 
+type StartLoadBalancerListenerRequest struct {
+	LoadBalancerId string
+	ListenerPort   int
+	Protocol       ProtocolType
+}
+
 type DeregisterBackendServerRequest struct {
 	LoadBalancerId    string
 	BackendServerList []BackendServerItem
 }
 
-type UpdateTargetsRequest struct {
+type UpdateBackendServerRequest struct {
 	LoadBalancerId    string
 	BackendServerList []BackendServerItem
 }

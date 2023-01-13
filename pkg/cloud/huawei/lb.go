@@ -28,3 +28,12 @@ func (p *HuaweiCloud) DeregisterBackendServer(req cloud.DeregisterBackendServerR
 	// TODO implement me
 	return errors.New("implement me")
 }
+
+func (p *HuaweiCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
+	// TODO implement me
+	return errors.New("implement me")
+}
+
+func (p *HuaweiCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	return errors.New("do not use this api")
+}

@@ -27,3 +27,12 @@ func (p *TencentCloud) DeregisterBackendServer(req cloud.DeregisterBackendServer
 	// TODO implement me
 	return errors.New("implement me")
 }
+
+func (p *TencentCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
+	// TODO implement me
+	return errors.New("implement me")
+}
+
+func (p *TencentCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	return errors.New("do not use this api")
+}

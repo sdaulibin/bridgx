@@ -25,3 +25,13 @@ func (p *ECloud) DeregisterBackendServer(req cloud.DeregisterBackendServerReques
 	// TODO implement me
 	return errors.New("implement me")
 }
+
+func (p *ECloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
+	// TODO implement me
+	return errors.New("implement me")
+}
+
+func (p *ECloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	// TODO implement me
+	return errors.New("implement me")
+}

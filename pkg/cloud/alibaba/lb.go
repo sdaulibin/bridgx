@@ -146,7 +146,8 @@ func (p *AlibabaCloud) createUDPListener(req cloud.CreateListenerRequest) error 
 	request := slb.CreateCreateLoadBalancerUDPListenerRequest()
 	request.LoadBalancerId = req.LoadBalancerId
 	request.Bandwidth = requests.NewInteger(defaultBandwidth)
-
+	request.BackendServerPort = requests.NewInteger(req.BackendServerPort)
+	request.VServerGroupId = req.ServerGroupId
 	for _, port := range req.PortList {
 		request.ListenerPort = requests.NewInteger(port)
 		response, err := p.slbClient.CreateLoadBalancerUDPListener(request)
@@ -160,7 +161,7 @@ func (p *AlibabaCloud) createUDPListener(req cloud.CreateListenerRequest) error 
 	return nil
 }
 
-func (p *AlibabaCloud) UpdateTargets(req cloud.UpdateTargetsRequest) error {
+func (p *AlibabaCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
 	if len(req.BackendServerList) == 0 {
 		return errors.New("target backend server empty")
 	}
@@ -168,7 +169,7 @@ func (p *AlibabaCloud) UpdateTargets(req cloud.UpdateTargetsRequest) error {
 		backendServers []BackendServer
 		serverTypeEcs  = "ecs"
 	)
-	request := slb.CreateAddBackendServersRequest()
+	request := slb.CreateSetBackendServersRequest()
 	request.LoadBalancerId = req.LoadBalancerId
 	for _, server := range req.BackendServerList {
 		if server.ServerId == "" {
@@ -194,7 +195,7 @@ func (p *AlibabaCloud) UpdateTargets(req cloud.UpdateTargetsRequest) error {
 		return err
 	}
 	request.BackendServers = string(backendServersJson)
-	response, err := p.slbClient.AddBackendServers(request)
+	response, err := p.slbClient.SetBackendServers(request)
 	if err != nil {
 		return err
 	}
@@ -202,5 +203,19 @@ func (p *AlibabaCloud) UpdateTargets(req cloud.UpdateTargetsRequest) error {
 		return fmt.Errorf("http status %v", response.GetHttpStatus())
 	}
 
+	return nil
+}
+
+func (p *AlibabaCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	request := slb.CreateStartLoadBalancerListenerRequest()
+	request.LoadBalancerId = req.LoadBalancerId
+	request.ListenerPort = requests.NewInteger(req.ListenerPort)
+	response, err := p.slbClient.StartLoadBalancerListener(request)
+	if err != nil {
+		return err
+	}
+	if response.GetHttpStatus() != http.StatusOK {
+		return fmt.Errorf("http status %v", response.GetHttpStatus())
+	}
 	return nil
 }

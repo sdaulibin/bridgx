@@ -27,3 +27,12 @@ func (p *BaiduCloud) DeregisterBackendServer(req cloud.DeregisterBackendServerRe
 	// TODO implement me
 	return errors.New("implement me")
 }
+
+func (p *BaiduCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
+	// TODO implement me
+	return errors.New("implement me")
+}
+
+func (p *BaiduCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	return errors.New("do not use this api")
+}

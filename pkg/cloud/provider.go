@@ -57,8 +57,10 @@ type Provider interface {
 	// LB Operate
 	CreateLoadBalancer(req CreateLoadBalancerRequest) (CreateLoadBalancerResponse, error)
 	CreateListener(req CreateListenerRequest) error
+	StartLoadBalancerListener(req StartLoadBalancerListenerRequest) error
 	RegisterBackendServer(req RegisterBackendServerRequest) error
 	DeregisterBackendServer(req DeregisterBackendServerRequest) error
+	UpdateBackendServer(req UpdateBackendServerRequest) error
 }
 
 type ProviderDriverFunc func(keyId ...string) (Provider, error)

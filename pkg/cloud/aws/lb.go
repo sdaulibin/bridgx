@@ -27,3 +27,11 @@ func (p *AWSCloud) DeregisterBackendServer(req cloud.DeregisterBackendServerRequ
 	// TODO implement me
 	return errors.New("implement me")
 }
+
+func (p *AWSCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
+	return errors.New("do not use this api")
+}
+
+func (p *AWSCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
+	return errors.New("do not use this api")
+}
