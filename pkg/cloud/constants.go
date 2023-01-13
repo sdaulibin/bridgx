@@ -108,7 +108,17 @@ const (
 	SubnetAvailable = "Available"
 	SubnetAbnormal  = "Abnormal"
 )
+
 const (
 	Year  = "Year"
 	Month = "Month"
+)
+
+type ProtocolType string
+
+const (
+	ProtocolTypeTCP   ProtocolType = "TCP"
+	ProtocolTypeUDP   ProtocolType = "UDP"
+	ProtocolTypeHTTP  ProtocolType = "HTTP"
+	ProtocolTypeHTTPS ProtocolType = "HTTPS"
 )

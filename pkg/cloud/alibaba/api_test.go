@@ -29,7 +29,7 @@ func TestDescribeInstanceBill(t *testing.T) {
 	request := bssopenapi.CreateDescribeInstanceBillRequest()
 	request.Scheme = "https"
 	request.BillingCycle = now.Format("2006-01")
-	//request.IsBillingItem = requests.NewBoolean(true)
+	// request.IsBillingItem = requests.NewBoolean(true)
 	request.IsHideZeroCharge = requests.NewBoolean(true)
 	request.Granularity = "DAILY"
 	request.ProductCode = "ecs"
@@ -69,7 +69,7 @@ func TestQueryInstanceBill(t *testing.T) {
 	request.Scheme = "https"
 	request.BillingCycle = date.Format("2006-01")
 	request.BillingDate = date.Format("2006-01-02")
-	//request.IsBillingItem = requests.NewBoolean(true)
+	// request.IsBillingItem = requests.NewBoolean(true)
 	request.IsHideZeroCharge = requests.NewBoolean(true)
 	request.Granularity = "DAILY"
 	request.ProductCode = "ecs"
@@ -108,11 +108,11 @@ func TestQueryInstanceBill2(t *testing.T) {
 	request := bssopenapi.CreateQueryInstanceBillRequest()
 	request.Scheme = "https"
 	request.BillingCycle = now.Format("2006-01")
-	//request.IsBillingItem = requests.NewBoolean(true)
+	// request.IsBillingItem = requests.NewBoolean(true)
 	request.IsHideZeroCharge = requests.NewBoolean(true)
 	request.Granularity = "DAILY"
 	request.BillingDate = now.Add(duration).Format("2006-01-02")
-	//request.MaxResults = requests.NewInteger(300) // aliyun max limit
+	// request.MaxResults = requests.NewInteger(300) // aliyun max limit
 	response, err := client.QueryInstanceBill(request)
 	if err != nil {
 		fmt.Print(err.Error())

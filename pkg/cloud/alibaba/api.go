@@ -8,17 +8,18 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
-	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-
 	openapi "github.com/alibabacloud-go/darabonba-openapi/client"
 	ecsClient "github.com/alibabacloud-go/ecs-20140526/v2/client"
 	"github.com/alibabacloud-go/tea/tea"
 	vpcClient "github.com/alibabacloud-go/vpc-20160428/v2/client"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials"
 	sdkErr "github.com/aliyun/alibaba-cloud-sdk-go/sdk/errors"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/bssopenapi"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/galaxy-future/BridgX/internal/logs"
 	"github.com/galaxy-future/BridgX/pkg/cloud"
 	"github.com/galaxy-future/BridgX/pkg/utils"
@@ -38,7 +39,9 @@ type AlibabaCloud struct {
 	bssClient *bssopenapi.Client
 	ossClient *oss.Client
 	sdkClient *sdk.Client
-	lock      sync.Mutex
+	slbClient *slb.Client
+
+	lock sync.Mutex
 }
 
 func New(AK, SK, region string) (*AlibabaCloud, error) {
@@ -59,19 +62,37 @@ func New(AK, SK, region string) (*AlibabaCloud, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	bssCtl, err := bssopenapi.NewClientWithAccessKey(region, AK, SK)
 	if err != nil {
 		return nil, err
 	}
+
 	sdkClient, err := sdk.NewClientWithAccessKey(region, AK, SK)
 	if err != nil {
 		return nil, err
 	}
+
 	ossClient, err := oss.New(getOssEndpoint(region), AK, SK)
 	if err != nil {
 		return nil, err
 	}
-	return &AlibabaCloud{client: client, vpcClient: vpcClt, ecsClient: ecsClt, bssClient: bssCtl, ossClient: ossClient, sdkClient: sdkClient}, nil
+
+	credential := credentials.NewAccessKeyCredential(AK, SK)
+	slbClient, err := slb.NewClientWithOptions(region, sdk.NewConfig(), credential)
+	if err != nil {
+		panic(err)
+	}
+
+	return &AlibabaCloud{
+		client:    client,
+		vpcClient: vpcClt,
+		ecsClient: ecsClt,
+		bssClient: bssCtl,
+		ossClient: ossClient,
+		sdkClient: sdkClient,
+		slbClient: slbClient,
+	}, nil
 }
 
 // BatchCreate the maximum of 'num' is 100

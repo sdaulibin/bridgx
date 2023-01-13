@@ -9,7 +9,7 @@ require (
 	github.com/alibabacloud-go/vpc-20160428/v2 v2.0.0
 	github.com/allegro/bigcache v1.2.1
 	github.com/aws/aws-sdk-go v1.42.25
-	github.com/baidubce/bce-sdk-go v0.9.133
+	github.com/baidubce/bce-sdk-go v0.9.141
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/go-cmp v0.5.5
@@ -20,7 +20,8 @@ require (
 	github.com/spf13/cast v1.4.1
 	github.com/stretchr/testify v1.7.0
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/api v1.0.321
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.539
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.577
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.577
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.320
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tcr v1.0.539
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/vpc v1.0.320

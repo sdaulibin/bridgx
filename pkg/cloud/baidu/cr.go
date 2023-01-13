@@ -18,7 +18,7 @@ import (
 
 func (p *BaiduCloud) ContainerInstanceList(region string, pageNumber, pageSize int) ([]cloud.RegistryInstance, int, error) {
 	ri := []cloud.RegistryInstance{}
-	//use utc time
+	// use utc time
 
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
@@ -64,7 +64,7 @@ func (p *BaiduCloud) ContainerInstanceList(region string, pageNumber, pageSize i
 
 func (p *BaiduCloud) EnterpriseNamespaceList(region, instanceId string, pageNumber, pageSize int) ([]cloud.Namespace, int, error) {
 	namespaces := []cloud.Namespace{}
-	//use utc time
+	// use utc time
 
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
@@ -107,7 +107,7 @@ func (p *BaiduCloud) EnterpriseNamespaceList(region, instanceId string, pageNumb
 
 func (p *BaiduCloud) PersonalNamespaceList(region string) ([]cloud.Namespace, error) {
 	namespacs := []cloud.Namespace{}
-	//use utc time
+	// use utc time
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
 	h := hmac.New(sha256.New, []byte(p.sk))
@@ -137,7 +137,7 @@ func (p *BaiduCloud) PersonalNamespaceList(region string) ([]cloud.Namespace, er
 	mm := m["result"].([]interface{})
 	for _, v := range mm {
 		n := v.(map[string]interface{})
-		//fmt.Println(n["projectId"].(float64))
+		// fmt.Println(n["projectId"].(float64))
 		namespace := cloud.Namespace{
 			Name: n["projectName"].(string),
 		}
@@ -149,7 +149,7 @@ func (p *BaiduCloud) PersonalNamespaceList(region string) ([]cloud.Namespace, er
 
 func (p *BaiduCloud) EnterpriseRepositoryList(region, instanceId, namespace string, pageNumber, pageSize int) ([]cloud.Repository, int, error) {
 	repos := []cloud.Repository{}
-	//use utc time
+	// use utc time
 
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
@@ -196,7 +196,7 @@ func (p *BaiduCloud) EnterpriseRepositoryList(region, instanceId, namespace stri
 
 func (p *BaiduCloud) PersonalRepositoryList(region, namespace string, pageNumber, pageSize int) ([]cloud.Repository, int, error) {
 	repos := []cloud.Repository{}
-	//use utc time
+	// use utc time
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
 	h := hmac.New(sha256.New, []byte(p.sk))
@@ -244,12 +244,12 @@ func (p *BaiduCloud) PersonalRepositoryList(region, namespace string, pageNumber
 	return repos, 0, nil
 }
 
-func (b BaiduCloud) PersonalImageList(region, projectID, repoName string, pageNum, pageSize int) ([]cloud.DockerArtifact, int, error) {
+func (p *BaiduCloud) PersonalImageList(region, projectID, repoName string, pageNum, pageSize int) ([]cloud.DockerArtifact, int, error) {
 	imagesVersion := []cloud.DockerArtifact{}
-	//use utc time
+	// use utc time
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
-	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", b.ak, timeStamp)
-	h := hmac.New(sha256.New, []byte(b.sk))
+	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
+	h := hmac.New(sha256.New, []byte(p.sk))
 	h.Write([]byte(authStringPrefix))
 	signKey := hex.EncodeToString(h.Sum(nil))
 	uri := fmt.Sprintf("/v1/ccr/repositories/tags\nprojectId=%s&repoName=%s", projectID, repoName)
@@ -292,7 +292,7 @@ func (b BaiduCloud) PersonalImageList(region, projectID, repoName string, pageNu
 // list images version
 func (p *BaiduCloud) EnterpriseImageList(region, instanceId, repoId, namespace, repoName string, pageNumber, pageSize int) ([]cloud.DockerArtifact, int, error) {
 	imagesVersion := []cloud.DockerArtifact{}
-	//use utc time
+	// use utc time
 
 	timeStamp := time.Now().UTC().Format("2006-01-02T15:04:05Z")
 	authStringPrefix := fmt.Sprintf("bce-auth-v1/%s/%s/10000", p.ak, timeStamp)
@@ -316,11 +316,9 @@ func (p *BaiduCloud) EnterpriseImageList(region, instanceId, repoId, namespace, 
 	if err != nil {
 		return imagesVersion, 0, err
 	}
-	//fmt.Println(resp.StatusCode, resp.Header)
 	m := make(map[string]interface{})
 	data, err := ioutil.ReadAll(resp.Body)
 	_ = json.Unmarshal(data, &m)
-	//fmt.Println(string(data))
 	mm := m["items"].([]interface{})
 	for _, v := range mm {
 		n := v.(map[string]interface{})

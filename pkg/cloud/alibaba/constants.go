@@ -11,6 +11,14 @@ const (
 
 	_payByBandwidth = "PayByBandwidth"
 	_payByTraffic   = "PayByTraffic"
+
+	// slb.s1.small
+	// slb.s2.small
+	// slb.s2.medium
+	// slb.s3.small
+	// slb.s3.medium
+	// slb.s3.large
+	_loadBalancerSpecS1Small = "slb.s1.small"
 )
 
 var _inEcsChargeType = map[string]string{

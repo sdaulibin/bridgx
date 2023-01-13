@@ -5,6 +5,7 @@ import (
 
 	"github.com/galaxy-future/BridgX/pkg/cloud"
 	api "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/api/v20201106"
+	clb "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb/v20180317"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
@@ -19,6 +20,7 @@ type TencentCloud struct {
 	apiClient *api.Client
 	cosClient *cos.Client
 	tcrClient *tcr.Client
+	clbClient *clb.Client
 }
 
 func New(ak, sk, region string) (h *TencentCloud, err error) {
@@ -51,6 +53,13 @@ func New(ak, sk, region string) (h *TencentCloud, err error) {
 		return nil, err
 	}
 
+	cpf = profile.NewClientProfile()
+	cpf.HttpProfile.Endpoint = _clbEndpoint
+	clbClient, err := clb.NewClient(credential, region, cpf)
+	if err != nil {
+		return nil, err
+	}
+
 	cosClient := cos.NewClient(nil, &http.Client{
 		Transport: &cos.AuthorizationTransport{
 			SecretID:  ak,
@@ -58,7 +67,13 @@ func New(ak, sk, region string) (h *TencentCloud, err error) {
 		},
 	})
 
-	return &TencentCloud{vpcClient: vpcClient, cvmClient: cvmClient, apiClient: apiClient, cosClient: cosClient, tcrClient: tcrClient}, nil
+	return &TencentCloud{vpcClient: vpcClient,
+		cvmClient: cvmClient,
+		apiClient: apiClient,
+		cosClient: cosClient,
+		tcrClient: tcrClient,
+		clbClient: clbClient,
+	}, nil
 }
 
 func (p *TencentCloud) ProviderType() string {

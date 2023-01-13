@@ -1,10 +1,11 @@
 package ecloud
 
 import (
+	"testing"
+
 	"github.com/galaxy-future/BridgX/internal/logs"
 	"github.com/galaxy-future/BridgX/pkg/cloud"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func init() {

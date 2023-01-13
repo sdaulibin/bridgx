@@ -70,11 +70,11 @@ type CreateVpcRequest struct {
 }
 
 type CreateVpcResponse struct {
-	//RouterId       *string `json:"VRouterId,omitempty" xml:"VRouterId,omitempty"`
-	//RouteTableId    *string `json:"RouteTableId,omitempty" xml:"RouteTableId,omitempty"`
+	// RouterId       *string `json:"VRouterId,omitempty" xml:"VRouterId,omitempty"`
+	// RouteTableId    *string `json:"RouteTableId,omitempty" xml:"RouteTableId,omitempty"`
 	VpcId     string
 	RequestId string
-	//ResourceGroupId *string `json:"ResourceGroupId,omitempty" xml:"ResourceGroupId,omitempty"`
+	// ResourceGroupId *string `json:"ResourceGroupId,omitempty" xml:"ResourceGroupId,omitempty"`
 }
 
 type GetVpcRequest struct {
@@ -240,7 +240,7 @@ type Image struct {
 	Platform  string `json:"platform"`
 	OsType    string `json:"os_type"`
 	OsName    string `json:"os_name"`
-	Size      int    `json:"size"` //GB
+	Size      int    `json:"size"` // GB
 	ImageId   string `json:"image_id"`
 	ImageName string `json:"image_name"`
 }
@@ -492,4 +492,55 @@ type TagData struct {
 type ImageTag struct {
 	Tag    string `json:"tag"`
 	Status string `json:"status"`
+}
+
+type CreateLoadBalancerRequest struct {
+	LoadBalancerName string
+}
+
+type CreateLoadBalancerResponse struct {
+	LoadBalancerId string
+	// LoadBalancer instance IP address
+	Address string
+}
+
+type BackendServerItem struct {
+	// backend server instance ID
+	ServerId    string `json:"ServerId"`
+	Port        int    `json:"Port"`
+	Weight      int    `json:"Weight"`
+	Description string `json:"Description"`
+}
+
+type RegisterBackendServerRequest struct {
+	LoadBalancerId    string
+	BackendServerList []BackendServerItem
+
+	TargetGroupId string
+}
+
+type CreateListenerRequest struct {
+	LoadBalancerId string
+	Protocol       ProtocolType
+	PortList       []int
+
+	// target backend server port
+	BackendServerPort int
+	ServerGroupId     string
+}
+
+type StartLoadBalancerListenerRequest struct {
+	LoadBalancerId string
+	ListenerPort   int
+	Protocol       ProtocolType
+}
+
+type DeregisterBackendServerRequest struct {
+	LoadBalancerId    string
+	BackendServerList []BackendServerItem
+}
+
+type UpdateBackendServerRequest struct {
+	LoadBalancerId    string
+	BackendServerList []BackendServerItem
 }
