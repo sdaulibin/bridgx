@@ -98,8 +98,8 @@ github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kd
 github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
 github.com/aws/aws-sdk-go v1.42.25 h1:BbdvHAi+t9LRiaYUyd53noq9jcaAcfzOhSVbKfr6Avs=
 github.com/aws/aws-sdk-go v1.42.25/go.mod h1:gyRszuZ/icHmHAVE4gc/r+cfCmhA1AD+vqfWbgI+eHs=
-github.com/baidubce/bce-sdk-go v0.9.133 h1:JLCBvJ36lY4KI1BPvXsr+68YLUWdPV7SXhUFkB5Ueuo=
-github.com/baidubce/bce-sdk-go v0.9.133/go.mod h1:zbYJMQwE4IZuyrJiFO8tO8NbtYiKTFTbwh4eIsqjVdg=
+github.com/baidubce/bce-sdk-go v0.9.141 h1:EV5BH5lfymIGPSmYDo9xYdsVlvWAW6nFeiA6t929zBE=
+github.com/baidubce/bce-sdk-go v0.9.141/go.mod h1:zbYJMQwE4IZuyrJiFO8tO8NbtYiKTFTbwh4eIsqjVdg=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
@@ -426,9 +426,12 @@ github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5Cc
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/api v1.0.321 h1:j6QcWmHZg0/w6O+PcLI7VQ+Gh+5c/5iPP3Ko/22Cgao=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/api v1.0.321/go.mod h1:aGlXSWjtSnE6kuqcaRy/NKj1CLiB8NlMSHGsDn+k7Ag=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.577 h1:ThAulzzI8cXOJ6qrlmajjJGpw9D10/WauWENzBQfomw=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/clb v1.0.577/go.mod h1:kqFTDpdc0w6tgIhCWBAdMyxWKiIW9W3bbCHrZL8mWfM=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.194/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
-github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.539 h1:5lhWDRRpLF1hErX0H/N4CA2VKEZdx4lxf8tGKj0sQAo=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.539/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.577 h1:7ohRB1Dz8gmOG3XTYmPKKhFraB7AR7Innqv4NEYL60Q=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.577/go.mod h1:7sCQWVkxcsR38nffDW057DRGk8mUjK1Ing/EFOK8s8Y=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.320 h1:7beMdpuyIIzO6ERG66udSvFIMpQg1Lt1MLlcQI5lJwg=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm v1.0.320/go.mod h1:AqyM/ZZMD7q5mHBqNY9YImbSpEpoEe7E/vrTbUWX+po=
 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/kms v1.0.194/go.mod h1:yrBKWhChnDqNz1xuXdSbWXG56XawEq0G5j1lg4VwBD4=

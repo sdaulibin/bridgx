@@ -13,10 +13,12 @@ const (
 )
 
 const (
-	_vpcEndpoint       = "vpc.tencentcloudapi.com"
-	_cvmEndpoint       = "cvm.tencentcloudapi.com"
-	_apiEndpoint       = "api.tencentcloudapi.com"
-	_tcrEndpoint       = "tcr.tencentcloudapi.com"
+	_vpcEndpoint = "vpc.tencentcloudapi.com"
+	_cvmEndpoint = "cvm.tencentcloudapi.com"
+	_apiEndpoint = "api.tencentcloudapi.com"
+	_tcrEndpoint = "tcr.tencentcloudapi.com"
+	_clbEndpoint = "clb.tencentcloudapi.com"
+
 	_subnetFilterVpcId = "vpc-id"
 )
 

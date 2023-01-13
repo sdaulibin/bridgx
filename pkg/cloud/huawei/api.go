@@ -19,6 +19,7 @@ import (
 	ecsRegion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/ecs/v2/region"
 	eip "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eip/v2"
 	EIPregion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/eip/v2/region"
+	elb "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2"
 	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 	iamModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/model"
 	iamRegion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/region"
@@ -29,6 +30,8 @@ import (
 	vpcRegion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/vpc/v2/region"
 	secGrp "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/vpc/v3"
 	secGrpRegion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/vpc/v3/region"
+	// elbModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2/model"
+	elbRegion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/elb/v2/region"
 )
 
 type HuaweiCloud struct {
@@ -39,6 +42,7 @@ type HuaweiCloud struct {
 	iamClient    *iam.IamClient
 	bssClient    *bss.BssClient
 	eipClient    *eip.EipClient
+	elbClient    *elb.ElbClient
 }
 
 func New(ak, sk, regionId string) (h *HuaweiCloud, err error) {
@@ -95,11 +99,25 @@ func New(ak, sk, regionId string) (h *HuaweiCloud, err error) {
 			WithCredential(auth).
 			Build())
 
-	return &HuaweiCloud{ecsClient: ecsClt, imsClient: imsClt, secGrpClient: secGrpClt, vpcClient: vpcClt,
-		iamClient: iamClt, bssClient: bssClt, eipClient: eipClt}, nil
+	elbClient := elb.NewElbClient(
+		elb.ElbClientBuilder().
+			WithRegion(elbRegion.ValueOf(regionId)).
+			WithCredential(auth).
+			Build())
+
+	return &HuaweiCloud{
+		ecsClient:    ecsClt,
+		imsClient:    imsClt,
+		secGrpClient: secGrpClt,
+		vpcClient:    vpcClt,
+		iamClient:    iamClt,
+		bssClient:    bssClt,
+		eipClient:    eipClt,
+		elbClient:    elbClient,
+	}, nil
 }
 
-func (HuaweiCloud) ProviderType() string {
+func (p *HuaweiCloud) ProviderType() string {
 	return cloud.HuaweiCloud
 }
 

@@ -3,18 +3,19 @@ package aws
 import (
 	"strings"
 
-	"github.com/galaxy-future/BridgX/internal/logs"
-	"github.com/galaxy-future/BridgX/pkg/cloud"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ec2"
+	"github.com/aws/aws-sdk-go/service/elb"
+	"github.com/galaxy-future/BridgX/internal/logs"
+	"github.com/galaxy-future/BridgX/pkg/cloud"
 )
 
 type AWSCloud struct {
 	ec2Client *ec2.EC2
 	sess      *session.Session
+	elbClient *elb.ELB
 }
 
 func New(ak, sk, regionId string) (*AWSCloud, error) {
@@ -26,9 +27,11 @@ func New(ak, sk, regionId string) (*AWSCloud, error) {
 		logs.Logger.Errorf("AWSCloud new session failed. err:[%v]", err)
 		return nil, err
 	}
+
 	return &AWSCloud{
 		ec2Client: ec2.New(sess),
 		sess:      sess,
+		elbClient: elb.New(sess),
 	}, nil
 }
 

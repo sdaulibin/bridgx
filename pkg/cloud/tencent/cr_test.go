@@ -1,8 +1,9 @@
 package tencent
 
 import (
-	"github.com/galaxy-future/BridgX/internal/logs"
 	"testing"
+
+	"github.com/galaxy-future/BridgX/internal/logs"
 )
 
 func TestContainerInstanceList(t *testing.T) {

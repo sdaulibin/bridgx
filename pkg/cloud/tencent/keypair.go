@@ -9,7 +9,7 @@ import (
 	cvm "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/cvm/v20170312"
 )
 
-//默认projectId 0
+// 默认projectId 0
 const _projectId int64 = 0
 
 func (p *TencentCloud) CreateKeyPair(req cloud.CreateKeyPairRequest) (cloud.CreateKeyPairResponse, error) {

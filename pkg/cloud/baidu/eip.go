@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (b *BaiduCloud) AllocateEip(req cloud.AllocateEipRequest) (ids []string, err error) {
+func (p *BaiduCloud) AllocateEip(req cloud.AllocateEipRequest) (ids []string, err error) {
 	name := ""
 	if req.Name != "" {
 		name = req.Name
@@ -40,7 +40,7 @@ func (b *BaiduCloud) AllocateEip(req cloud.AllocateEipRequest) (ids []string, er
 
 	for i := 0; i < req.Num; i++ {
 		go func() {
-			res, err := b.eipClient.CreateEip(args)
+			res, err := p.eipClient.CreateEip(args)
 			if err != nil {
 				logs.Logger.Errorf("AllocateEip BaiduCloud failed.err:[%v] req:[%v]", err, req)
 				errChan <- err
@@ -56,17 +56,17 @@ func (b *BaiduCloud) AllocateEip(req cloud.AllocateEipRequest) (ids []string, er
 			ids = append(ids, id)
 		}
 	}
-	//ids = append(ids, res.Eip)
+	// ids = append(ids, res.Eip)
 	return ids, err
 }
 
-func (b *BaiduCloud) GetEips(ids []string, regionId string) (map[string]cloud.Eip, error) {
+func (p *BaiduCloud) GetEips(ids []string, regionId string) (map[string]cloud.Eip, error) {
 	res := map[string]cloud.Eip{}
 	for _, id := range ids {
 		args := &eip.ListEipArgs{
 			Eip: id,
 		}
-		result, err := b.eipClient.ListEip(args)
+		result, err := p.eipClient.ListEip(args)
 		if err != nil {
 			return nil, err
 		}
@@ -85,10 +85,10 @@ func (b *BaiduCloud) GetEips(ids []string, regionId string) (map[string]cloud.Ei
 	return res, nil
 }
 
-func (b *BaiduCloud) ReleaseEip(ids []string) (err error) {
+func (p *BaiduCloud) ReleaseEip(ids []string) (err error) {
 
 	for _, eip := range ids {
-		err = b.eipClient.DeleteEip(eip, "")
+		err = p.eipClient.DeleteEip(eip, "")
 		if err != nil {
 			break
 		}
@@ -96,35 +96,35 @@ func (b *BaiduCloud) ReleaseEip(ids []string) (err error) {
 	return
 }
 
-func (b *BaiduCloud) AssociateEip(id, instanceId, vpcId string) error {
+func (p *BaiduCloud) AssociateEip(id, instanceId, vpcId string) error {
 	args := &eip.BindEipArgs{
 		InstanceType: "BCC",
 		InstanceId:   instanceId,
 	}
-	err := b.eipClient.BindEip(id, args)
+	err := p.eipClient.BindEip(id, args)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BaiduCloud) DisassociateEip(id string) error {
-	//id  == eip
-	err := b.eipClient.UnBindEip(id, "")
+func (p *BaiduCloud) DisassociateEip(id string) error {
+	// id  == eip
+	err := p.eipClient.UnBindEip(id, "")
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *BaiduCloud) DescribeEip(req cloud.DescribeEipRequest) (cloud.DescribeEipResponse, error) {
+func (p *BaiduCloud) DescribeEip(req cloud.DescribeEipRequest) (cloud.DescribeEipResponse, error) {
 	args := &eip.ListEipArgs{
 		InstanceId: req.InstanceId,
 		Status:     "available",
 		Marker:     req.OlderMarker,
 		MaxKeys:    req.PageSize,
 	}
-	result, _ := b.eipClient.ListEip(args)
+	result, _ := p.eipClient.ListEip(args)
 	list := []cloud.Eip{}
 	for _, eip := range result.EipList {
 		e := cloud.Eip{
@@ -143,6 +143,6 @@ func (b *BaiduCloud) DescribeEip(req cloud.DescribeEipRequest) (cloud.DescribeEi
 	}, nil
 }
 
-func (b *BaiduCloud) ConvertPublicIpToEip(req cloud.ConvertPublicIpToEipRequest) error {
+func (p *BaiduCloud) ConvertPublicIpToEip(req cloud.ConvertPublicIpToEipRequest) error {
 	return errors.New("not Implemented") // do not support in baidu cloud
 }
