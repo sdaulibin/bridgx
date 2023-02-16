@@ -1,8 +1,9 @@
 package tencent
 
 import (
-	"github.com/galaxy-future/BridgX/pkg/cloud"
 	"testing"
+
+	"github.com/galaxy-future/BridgX/pkg/cloud"
 )
 
 var (
@@ -12,31 +13,31 @@ var (
 
 func TestTencentCloud_CreateLoadBalancer(t *testing.T) {
 	type args struct {
-		request cloud.CreateLoadBalancerRequest
+		Req cloud.CreateLoadBalancerRequest
 	}
 
 	tests := []struct {
-		name    string
-		args    args
-		want    cloud.CreateLoadBalancerResponse
-		wantErr bool
+		Name    string
+		Args    args
+		Want    cloud.CreateLoadBalancerResponse
+		WantErr bool
 	}{
 		{
-			name: "测试新建lb",
-			args: args{
-				request: cloud.CreateLoadBalancerRequest{
-					LoadBalancerName: "test001",
+			Name: "测试新建lb",
+			Args: args{
+				Req: cloud.CreateLoadBalancerRequest{
+					LoadBalancerName: "test002",
 				},
 			},
-			wantErr: false,
+			WantErr: false,
 		},
 	}
 	p, _ := New(ak, sk, "ap-beijing")
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := p.CreateLoadBalancer(tt.args.request)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("TestTencentCloud CreateLoadBalancer() error = %v, wantErr %v", err, tt.wantErr)
+		t.Run(tt.Name, func(t *testing.T) {
+			got, err := p.CreateLoadBalancer(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud CreateLoadBalancer() error = %v, wantErr %v", err, tt.WantErr)
 				return
 			}
 			t.Logf("TestTencentCloud CreateLoadBalancer() got = %v", got)
@@ -46,17 +47,17 @@ func TestTencentCloud_CreateLoadBalancer(t *testing.T) {
 
 func TestTencentCloud_CreateListener(t *testing.T) {
 	type args struct {
-		req cloud.CreateListenerRequest
+		Req cloud.CreateListenerRequest
 	}
 
 	tests := []struct {
-		name    string
-		agrs    args
-		wantErr bool
+		Name    string
+		Args    args
+		WantErr bool
 	}{
 		{
-			name: "新建listener",
-			agrs: args{req: cloud.CreateListenerRequest{
+			Name: "新建listener",
+			Args: args{Req: cloud.CreateListenerRequest{
 				LoadBalancerId: "lb-hccgj54f",
 				Protocol:       cloud.ProtocolTypeHTTP,
 				PortList:       []int{8088, 8089},
@@ -65,11 +66,76 @@ func TestTencentCloud_CreateListener(t *testing.T) {
 	}
 	p, _ := New(ak, sk, "ap-beijing")
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := p.CreateListener(tt.agrs.req)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("TestTencentCloud CreateListener() error = %v, wantErr %v", err, tt.wantErr)
+		t.Run(tt.Name, func(t *testing.T) {
+			err := p.CreateListener(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud CreateListener() error = %v, wantErr %v", err, tt.WantErr)
 				return
+			}
+		})
+	}
+}
+
+func TestTencentCloud_RegisterBackendServer(t *testing.T) {
+	type args struct {
+		Req cloud.RegisterBackendServerRequest
+	}
+	tests := []struct {
+		Name    string
+		Args    args
+		WantErr bool
+	}{
+		{
+			Name: "绑定后端服务",
+			Args: args{
+				Req: cloud.RegisterBackendServerRequest{
+					LoadBalancerId: "",
+					BackendServerList: []cloud.BackendServerItem{
+						{
+							ServerId: "",
+							Port:     88,
+							Weight:   100,
+						},
+					},
+				},
+			},
+			WantErr: false,
+		},
+	}
+	p, _ := New(ak, sk, "ap-beijing")
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			err := p.RegisterBackendServer(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud RegisterBackendServer() error = %v, wantErr %v", err, tt.WantErr)
+			}
+		})
+	}
+}
+
+func TestTencentCloud_DeregisterBackendServer(t *testing.T) {
+	type args struct {
+		Req cloud.DeregisterBackendServerRequest
+	}
+	tests := []struct {
+		Name    string
+		Args    args
+		WantErr bool
+	}{
+		{
+			Name: "解绑后端服务",
+			Args: args{
+				Req: cloud.DeregisterBackendServerRequest{},
+			},
+			WantErr: false,
+		},
+	}
+	p, _ := New(ak, sk, "ap-beijing")
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			err := p.DeregisterBackendServer(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud DeregisterBackendServer() error = %v, wantErr %v", err, tt.WantErr)
 			}
 		})
 	}

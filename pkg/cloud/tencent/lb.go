@@ -3,6 +3,8 @@ package tencent
 import (
 	"errors"
 	"fmt"
+	"github.com/galaxy-future/BridgX/internal/logs"
+
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 
 	"github.com/galaxy-future/BridgX/pkg/cloud"
@@ -35,6 +37,9 @@ func (p *TencentCloud) CreateLoadBalancer(req cloud.CreateLoadBalancerRequest) (
 }
 
 func (p *TencentCloud) CreateListener(req cloud.CreateListenerRequest) error {
+	if len(req.PortList) == 0 {
+		return errors.New("listener ports empty")
+	}
 	request := clb.NewCreateListenerRequest()
 	request.LoadBalancerId = &req.LoadBalancerId
 	request.Protocol = (*string)(&req.Protocol)
@@ -54,13 +59,49 @@ func (p *TencentCloud) CreateListener(req cloud.CreateListenerRequest) error {
 }
 
 func (p *TencentCloud) RegisterBackendServer(req cloud.RegisterBackendServerRequest) error {
-	// TODO implement me
-	return errors.New("implement me")
+	if len(req.BackendServerList) == 0 {
+		return errors.New("register backend server list empty")
+	}
+	request := clb.NewRegisterTargetsRequest()
+	request.LoadBalancerId = &req.LoadBalancerId
+	targets := make([]*clb.Target, 0)
+	for _, server := range req.BackendServerList {
+		target := &clb.Target{}
+		target.Port = common.Int64Ptr(int64(server.Port))
+		target.Weight = common.Int64Ptr(int64(server.Weight))
+		target.InstanceId = common.StringPtr(server.ServerId)
+		targets = append(targets, target)
+	}
+	request.Targets = targets
+	_, err := p.clbClient.RegisterTargets(request)
+	if err != nil {
+		logs.Logger.Errorf(err.Error())
+		return err
+	}
+	return nil
 }
 
 func (p *TencentCloud) DeregisterBackendServer(req cloud.DeregisterBackendServerRequest) error {
-	// TODO implement me
-	return errors.New("implement me")
+	if len(req.BackendServerList) == 0 {
+		return errors.New("deregister backend server list empty")
+	}
+	request := clb.NewDeregisterTargetsRequest()
+	request.LoadBalancerId = &req.LoadBalancerId
+	targets := make([]*clb.Target, 0)
+	for _, server := range req.BackendServerList {
+		target := &clb.Target{}
+		target.Port = common.Int64Ptr(int64(server.Port))
+		target.Weight = common.Int64Ptr(int64(server.Weight))
+		target.InstanceId = common.StringPtr(server.ServerId)
+		targets = append(targets, target)
+	}
+	request.Targets = targets
+	_, err := p.clbClient.DeregisterTargets(request)
+	if err != nil {
+		logs.Logger.Errorf(err.Error())
+		return err
+	}
+	return nil
 }
 
 func (p *TencentCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
