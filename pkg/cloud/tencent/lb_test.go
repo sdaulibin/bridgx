@@ -26,7 +26,7 @@ func TestTencentCloud_CreateLoadBalancer(t *testing.T) {
 			Name: "测试新建lb",
 			Args: args{
 				Req: cloud.CreateLoadBalancerRequest{
-					LoadBalancerName: "test002",
+					LoadBalancerName: "test20230221001",
 				},
 			},
 			WantErr: false,
@@ -58,7 +58,7 @@ func TestTencentCloud_CreateListener(t *testing.T) {
 		{
 			Name: "新建listener",
 			Args: args{Req: cloud.CreateListenerRequest{
-				LoadBalancerId: "lb-hccgj54f",
+				LoadBalancerId: "lb-r70cytxd",
 				Protocol:       cloud.ProtocolTypeHTTP,
 				PortList:       []int{8088, 8089},
 			}},
