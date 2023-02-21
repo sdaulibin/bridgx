@@ -3,6 +3,7 @@ package tencent
 import (
 	"errors"
 	"fmt"
+
 	"github.com/galaxy-future/BridgX/internal/logs"
 
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
@@ -17,13 +18,11 @@ func (p *TencentCloud) CreateLoadBalancer(req cloud.CreateLoadBalancerRequest) (
 		return cloud.CreateLoadBalancerResponse{}, fmt.Errorf("loadBalancer name is empty")
 	}
 	var (
-		loadBalancerType = "INTERNAL"
-		subnetId         = "subnet-8up9sesx"
+		loadBalancerType = "OPEN"
 	)
 	request := clb.NewCreateLoadBalancerRequest()
 	request.LoadBalancerName = &req.LoadBalancerName
 	request.LoadBalancerType = &loadBalancerType
-	request.SubnetId = &subnetId
 	response, err := p.clbClient.CreateLoadBalancer(request)
 	if err != nil {
 		return cloud.CreateLoadBalancerResponse{}, err
@@ -53,7 +52,7 @@ func (p *TencentCloud) CreateListener(req cloud.CreateListenerRequest) error {
 		return err
 	}
 	if response.Response.ListenerIds == nil || len(response.Response.ListenerIds) == 0 {
-		return fmt.Errorf("Listener ids length 0 or nil")
+		return errors.New("Listener ids length 0 or nil")
 	}
 	return nil
 }
@@ -64,15 +63,8 @@ func (p *TencentCloud) RegisterBackendServer(req cloud.RegisterBackendServerRequ
 	}
 	request := clb.NewRegisterTargetsRequest()
 	request.LoadBalancerId = &req.LoadBalancerId
-	targets := make([]*clb.Target, 0)
-	for _, server := range req.BackendServerList {
-		target := &clb.Target{}
-		target.Port = common.Int64Ptr(int64(server.Port))
-		target.Weight = common.Int64Ptr(int64(server.Weight))
-		target.InstanceId = common.StringPtr(server.ServerId)
-		targets = append(targets, target)
-	}
-	request.Targets = targets
+	request.ListenerId = &req.ListenerId
+	request.Targets = createTargets(req.BackendServerList)
 	_, err := p.clbClient.RegisterTargets(request)
 	if err != nil {
 		logs.Logger.Errorf(err.Error())
@@ -87,15 +79,8 @@ func (p *TencentCloud) DeregisterBackendServer(req cloud.DeregisterBackendServer
 	}
 	request := clb.NewDeregisterTargetsRequest()
 	request.LoadBalancerId = &req.LoadBalancerId
-	targets := make([]*clb.Target, 0)
-	for _, server := range req.BackendServerList {
-		target := &clb.Target{}
-		target.Port = common.Int64Ptr(int64(server.Port))
-		target.Weight = common.Int64Ptr(int64(server.Weight))
-		target.InstanceId = common.StringPtr(server.ServerId)
-		targets = append(targets, target)
-	}
-	request.Targets = targets
+	request.ListenerId = &req.ListenerId
+	request.Targets = createTargets(req.BackendServerList)
 	_, err := p.clbClient.DeregisterTargets(request)
 	if err != nil {
 		logs.Logger.Errorf(err.Error())
@@ -105,10 +90,33 @@ func (p *TencentCloud) DeregisterBackendServer(req cloud.DeregisterBackendServer
 }
 
 func (p *TencentCloud) UpdateBackendServer(req cloud.UpdateBackendServerRequest) error {
-	// TODO implement me
-	return errors.New("implement me")
+	if len(req.BackendServerList) == 0 {
+		return errors.New("update backend server list empty")
+	}
+	request := clb.NewModifyTargetWeightRequest()
+	request.LoadBalancerId = &req.LoadBalancerId
+	request.ListenerId = &req.ListenerId
+	request.Targets = createTargets(req.BackendServerList)
+	_, err := p.clbClient.ModifyTargetWeight(request)
+	if err != nil {
+		logs.Logger.Errorf(err.Error())
+		return err
+	}
+	return nil
 }
 
 func (p *TencentCloud) StartLoadBalancerListener(req cloud.StartLoadBalancerListenerRequest) error {
 	return errors.New("do not use this api")
+}
+
+func createTargets(serverList []cloud.BackendServerItem) []*clb.Target {
+	targets := make([]*clb.Target, 0)
+	for _, server := range serverList {
+		target := &clb.Target{}
+		target.Port = common.Int64Ptr(int64(server.Port))
+		target.Weight = common.Int64Ptr(int64(server.Weight))
+		target.InstanceId = common.StringPtr(server.ServerId)
+		targets = append(targets, target)
+	}
+	return targets
 }

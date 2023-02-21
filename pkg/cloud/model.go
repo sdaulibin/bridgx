@@ -514,6 +514,7 @@ type BackendServerItem struct {
 
 type RegisterBackendServerRequest struct {
 	LoadBalancerId    string
+	ListenerId        string
 	BackendServerList []BackendServerItem
 
 	TargetGroupId string
@@ -537,10 +538,12 @@ type StartLoadBalancerListenerRequest struct {
 
 type DeregisterBackendServerRequest struct {
 	LoadBalancerId    string
+	ListenerId        string
 	BackendServerList []BackendServerItem
 }
 
 type UpdateBackendServerRequest struct {
 	LoadBalancerId    string
+	ListenerId        string
 	BackendServerList []BackendServerItem
 }

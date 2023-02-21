@@ -90,11 +90,12 @@ func TestTencentCloud_RegisterBackendServer(t *testing.T) {
 			Args: args{
 				Req: cloud.RegisterBackendServerRequest{
 					LoadBalancerId: "",
+					ListenerId:     "",
 					BackendServerList: []cloud.BackendServerItem{
 						{
 							ServerId: "",
-							Port:     88,
-							Weight:   100,
+							Port:     8801,
+							Weight:   50,
 						},
 					},
 				},
@@ -125,7 +126,15 @@ func TestTencentCloud_DeregisterBackendServer(t *testing.T) {
 		{
 			Name: "解绑后端服务",
 			Args: args{
-				Req: cloud.DeregisterBackendServerRequest{},
+				Req: cloud.DeregisterBackendServerRequest{
+					LoadBalancerId: "",
+					ListenerId:     "",
+					BackendServerList: []cloud.BackendServerItem{
+						{
+							ServerId: "",
+						},
+					},
+				},
 			},
 			WantErr: false,
 		},
@@ -136,6 +145,43 @@ func TestTencentCloud_DeregisterBackendServer(t *testing.T) {
 			err := p.DeregisterBackendServer(tt.Args.Req)
 			if (err != nil) != tt.WantErr {
 				t.Errorf("TestTencentCloud DeregisterBackendServer() error = %v, wantErr %v", err, tt.WantErr)
+			}
+		})
+	}
+}
+
+func TestTencentCloud_UpdateBackendServer(t *testing.T) {
+	type args struct {
+		Req cloud.UpdateBackendServerRequest
+	}
+	tests := []struct {
+		Name    string
+		Args    args
+		WantErr bool
+	}{
+		{
+			Name: "修改权重",
+			Args: args{
+				Req: cloud.UpdateBackendServerRequest{
+					LoadBalancerId: "",
+					ListenerId:     "",
+					BackendServerList: []cloud.BackendServerItem{
+						{
+							ServerId: "",
+							Weight:   100,
+						},
+					},
+				},
+			},
+			WantErr: false,
+		},
+	}
+	p, _ := New(ak, sk, "ap-beijing")
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			err := p.UpdateBackendServer(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud UpdateBackendServer() error = %v, wantErr %v", err, tt.WantErr)
 			}
 		})
 	}
