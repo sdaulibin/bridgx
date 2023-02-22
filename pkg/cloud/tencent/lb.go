@@ -120,3 +120,26 @@ func createTargets(serverList []cloud.BackendServerItem) []*clb.Target {
 	}
 	return targets
 }
+
+func (p *TencentCloud) CreateListenerRules(req cloud.CreateListenerRuleRequest) error {
+	if len(req.ListenerRuleList) == 0 {
+		return errors.New("create listener rules list empty")
+	}
+	request := clb.NewCreateRuleRequest()
+	request.LoadBalancerId = &req.LoadBalancerId
+	request.ListenerId = &req.ListenerId
+	rules := make([]*clb.RuleInput, 0)
+	for _, v := range req.ListenerRuleList {
+		rule := &clb.RuleInput{}
+		rule.Domain = common.StringPtr(v.Domain)
+		rule.Url = common.StringPtr(v.Url)
+		rules = append(rules, rule)
+	}
+	request.Rules = rules
+	_, err := p.clbClient.CreateRule(request)
+	if err != nil {
+		logs.Logger.Errorf(err.Error())
+		return err
+	}
+	return nil
+}

@@ -547,3 +547,16 @@ type UpdateBackendServerRequest struct {
 	ListenerId        string
 	BackendServerList []BackendServerItem
 }
+
+type CreateListenerRuleRequest struct {
+	LoadBalancerId   string
+	ListenerId       string
+	ListenerRuleList []ListenerRule
+}
+
+type ListenerRule struct {
+	// 域名
+	Domain string `json:"Domain"`
+	//转发路径
+	Url string `json:"Url"`
+}

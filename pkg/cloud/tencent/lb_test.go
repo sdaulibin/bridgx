@@ -26,7 +26,7 @@ func TestTencentCloud_CreateLoadBalancer(t *testing.T) {
 			Name: "测试新建lb",
 			Args: args{
 				Req: cloud.CreateLoadBalancerRequest{
-					LoadBalancerName: "test20230221001",
+					LoadBalancerName: "test20230221002",
 				},
 			},
 			WantErr: false,
@@ -182,6 +182,43 @@ func TestTencentCloud_UpdateBackendServer(t *testing.T) {
 			err := p.UpdateBackendServer(tt.Args.Req)
 			if (err != nil) != tt.WantErr {
 				t.Errorf("TestTencentCloud UpdateBackendServer() error = %v, wantErr %v", err, tt.WantErr)
+			}
+		})
+	}
+}
+
+func TestTencentCloud_CreateListenerRules(t *testing.T) {
+	type args struct {
+		Req cloud.CreateListenerRuleRequest
+	}
+	tests := []struct {
+		Name    string
+		Args    args
+		WantErr bool
+	}{
+		{
+			Name: "新建监听器转发规则",
+			Args: args{
+				Req: cloud.CreateListenerRuleRequest{
+					LoadBalancerId: "",
+					ListenerId:     "",
+					ListenerRuleList: []cloud.ListenerRule{
+						{
+							Domain: "www.example.com",
+							Url:    "/test/",
+						},
+					},
+				},
+			},
+			WantErr: false,
+		},
+	}
+	p, _ := New(ak, sk, "ap-beijing")
+	for _, tt := range tests {
+		t.Run(tt.Name, func(t *testing.T) {
+			err := p.CreateListenerRules(tt.Args.Req)
+			if (err != nil) != tt.WantErr {
+				t.Errorf("TestTencentCloud CreateListenerRules() error = %v, wantErr %v", err, tt.WantErr)
 			}
 		})
 	}
