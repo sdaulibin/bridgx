@@ -58,7 +58,7 @@ func TestTencentCloud_CreateListener(t *testing.T) {
 		{
 			Name: "新建listener",
 			Args: args{Req: cloud.CreateListenerRequest{
-				LoadBalancerId: "lb-r70cytxd",
+				LoadBalancerId: "lb-32l8dd9r",
 				Protocol:       cloud.ProtocolTypeHTTP,
 				PortList:       []int{8088, 8089},
 			}},
@@ -200,12 +200,12 @@ func TestTencentCloud_CreateListenerRules(t *testing.T) {
 			Name: "新建监听器转发规则",
 			Args: args{
 				Req: cloud.CreateListenerRuleRequest{
-					LoadBalancerId: "",
-					ListenerId:     "",
+					LoadBalancerId: "lb-32l8dd9r",
+					ListenerId:     "lbl-4txuntcd",
 					ListenerRuleList: []cloud.ListenerRule{
 						{
 							Domain: "www.example.com",
-							Url:    "/test/",
+							Url:    "/test",
 						},
 					},
 				},
